@@ -1,0 +1,55 @@
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    {{ form_start(formGateau) }}
+
+    {{ form_row(formGateau.name) }}
+
+    {{ form_row(formGateau.description) }}
+
+    {{ form_label(formGateau.ingredients) }}
+
+
+    <ul class="images"
+        data-index="{{ formGateau.images|length > 0 ? formGateau.images|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(formGateau.images.vars.prototype)|e('html_attr') }}"
+    ></ul>
+    <button type="button" class="add_item_link btn btn-success" data-collection-holder-class="images">Add Images</button>
+
+
+    <ul class="ingredients"
+        data-index="{{ formGateau.ingredients|length > 0 ? formGateau.ingredients|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(formGateau.ingredients.vars.prototype)|e('html_attr') }}"
+    ></ul>
+    <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="ingredients">Add ingredients</button>
+
+    <script>
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('li');
+
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+
+            collectionHolder.appendChild(item);
+
+            collectionHolder.dataset.index++;
+        };
+        document
+            .querySelectorAll('.add_item_link')
+            .forEach(btn => {
+                btn.addEventListener("click", addFormToCollection)
+            });
+    </script>
+    <input type="submit" class="btn btn-success">
+    {{ form_end(formGateau) }}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GateauController!{% endblock %}
+
+{% block body %}
+    {%for gateau in gateaux %}
+
+        <div class="border border-dark row">
+
+            <h3>{{ gateau.name }}</h3>
+
+            <p><strong>{{ gateau.description }}</strong></p>
+
+
+        {% for ingredient in gateau.ingredients %}
+
+            <p> - {{ ingredient.name }}</p>
+        {% endfor %}
+            {% for image in gateau.images %}
+
+                <img height="300px" width="250px" src="{{ vich_uploader_asset(image,'imageFile') | imagine_filter('vignette') }}" alt="">
+            {% endfor %}
+            <a href="{{ path('show_gateau', {id:gateau.id}) }} " class="btn btn-success">voir</a>
+        </div>
+
+
+
+
+    {% endfor %}
+{% endblock %}
